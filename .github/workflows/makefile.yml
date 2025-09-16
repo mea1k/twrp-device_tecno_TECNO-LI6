@@ -22,6 +22,7 @@ jobs:
 
     - name: Build TWRP
       run: |
+        source ./envsetup.sh
         lunch twrp_LI6-eng && mka adbd vendorbootimage
 
     - name: Upload artifacts
