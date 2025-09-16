@@ -20,10 +20,17 @@ jobs:
           gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses6 lib32z1 ccache \
           libgl1-mesa-dev libxml2-utils xsltproc unzip python3
 
+    - name: Install repo tool
+      run: |
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        echo "::add-path::~/bin"
+
     - name: Setup TWRP repo
       run: |
-        repo init -u https://github.com/TeamWin/android_bootable_recovery.git -b twrp-12.1
-        repo sync -c -j2
+        ~/bin/repo init -u https://github.com/TeamWin/android_bootable_recovery.git -b twrp-12.1
+        ~/bin/repo sync -c -j2
 
     - name: Build TWRP
       run: |
