@@ -20,27 +20,22 @@ jobs:
           gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses6 lib32z1 ccache \
           libgl1-mesa-dev libxml2-utils xsltproc unzip python3 bc
 
-    - name: Install repo tool
+    - name: Clone TWRP branch android-12.1
       run: |
-        mkdir -p ~/bin
-        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-        chmod a+x ~/bin/repo
-        echo "PATH=$HOME/bin:$PATH" >> $GITHUB_ENV
-
-    - name: Setup TWRP repo
-      run: |
-        repo init -u https://github.com/TeamWin/android_bootable_recovery.git -b android-12.1
-        repo sync -c -j2
+        git clone -b android-12.1 https://github.com/TeamWin/android_bootable_recovery.git twrp
+        cd twrp
+        ls -l  # проверка содержимого
 
     - name: Build TWRP
+      working-directory: twrp
       run: |
         source build/envsetup.sh
         lunch twrp_LI6-eng
-        # уменьшение параллельной сборки для GitHub Actions
+        # уменьшаем параллельность для GitHub Actions
         mka adbd recoveryimage -j1
 
     - name: Upload recovery image
       uses: actions/upload-artifact@v4
       with:
         name: twrp-LI6
-        path: out/target/product/LI6/recovery.img
+        path: twrp/out/target/product/LI6/recovery.img
