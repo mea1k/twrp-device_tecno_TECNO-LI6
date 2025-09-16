@@ -33,8 +33,7 @@ jobs:
         mka adbd vendorbootimage
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: TWRP-build
-        path: |
-          out/target/product/LI6/*.img
+        path: out/target/product/LI6/*.img
